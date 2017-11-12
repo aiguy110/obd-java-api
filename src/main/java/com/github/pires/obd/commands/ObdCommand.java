@@ -178,6 +178,13 @@ public abstract class ObdCommand {
             rawData = rawData.substring(i+echo.length()); // Chop off echo
         }
 
+        // Seek to response header for this command
+        String response = "4"+echo.substring(1); // e.g. 010D --> 410D
+        i = rawData.indexOf(response);
+        if (i!=-1){
+            rawData = rawData.substring(i);
+        }
+
         if (!DIGITS_LETTERS_PATTERN.matcher(rawData).matches()) {
             throw new NonNumericResponseException(rawData);
         }
